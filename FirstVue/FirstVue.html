@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+
+	<!--Bootstrap -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+	
+	<title>First Vue</title>
+</head>
+<body>
+	
+	<div id="app"></div>
+	<!-- development version, includes helpful console warnings -->
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script type="text/javascript">
+		new Vue({
+			el: '#app',
+			template: `
+				<div class="container">
+					<h1>Commments</h1>
+					<hr>
+					<div class="form-todo form-group"> 
+						
+						<p>
+							<input  placeholder = "Name" type="text" name="author" class="form-control" v-model="name">
+						</p>
+
+						<p>
+							<textarea placeholder="Comment" name="message" class="form-control" v-model="message"></textarea>
+						</p>
+						
+						<button v-on:click="addComment" type="submit" class="btn btn-primary">Comment</button>
+					</div>
+
+					<div class="list-group">
+						<div class="list-group-item" v-for="(c, index) in allComents">
+							<span class="comment_author">Author: <strong>{{c.name}}</strong></span>
+							<p>{{c.message}}</p>
+							<div>
+								
+								<a v-on:click.prevent="deleteComment(index)" href="" title="Delete" >Delete</a>				
+							</div>
+						</div>
+					</div>
+
+				</div>
+			`,
+
+			data(){
+				return{
+					comments: [
+						{
+							name: "Luiz",
+							message: "Lorem ipsum"
+						}
+					],
+					name: "",
+					message: ""
+				}
+			},
+			methods: {
+				addComment(){
+					if(this.message.trim() == "") return;
+
+					this.comments.push({
+						name: this.name,
+						message: this.message
+					});
+
+					this.name = "";
+					this.message = "";
+				},
+				deleteComment(index){
+					this.comments.splice(index, 1);
+				}
+
+			},
+			computed: {
+				allComents(){
+					return this.comments.map(c => ({...c, name: c.name.trim() == ""? "Anonymous" : c.name })  );
+				}
+			},
+			watch: {
+				comments(val){
+					console.log("value: ", val);
+				}
+			}
+
+		})
+	</script>
+</body>
+
+
+	
+</script>
+
+</html>
