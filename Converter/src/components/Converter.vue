@@ -18,26 +18,37 @@
 			}
 		},
 		methods: {
+			//Convert the currencyA to currencyB
 			convert(){
+				//cA is the value to be converted. If the user didn't put anything it becomes zero       
 				let cA = this.currencyA_value? this.currencyA_value:0; 
+
+				//URL to the currency converter
 				let url = 'https://api.exchangeratesapi.io/latest?base=' + this.currencyA + '&symbols=' + this.currencyB;
 				
+				/*fetch sends a GET request to the URL above. It receives a response that
+				is converted to JSON and then the exchange rate (er) is collected from 
+				the object and used to calculated the final converted value*/
 				fetch(url).then(res => res.json()).then(json => {
-					console.log(json);
-				let price = json.rates[this.currencyB];
-				this.currencyB_value = (price * parseFloat(cA)).toFixed(2);
+					let er = json.rates[this.currencyB];
+					this.currencyB_value = (er * parseFloat(cA)).toFixed(2);
 
-				})
+				});
 			}
 			
 		},
 		watch: {
+
+			/*If generalCurrencyValue changes to a non-zero value then currencyA_value
+			is set to be this value*/
 			generalCurrencyValue: function(a){
 				if(a != 0){
 					this.currencyA_value = this.generalCurrencyValue;
 					this.convert();
 				}
 			},
+			
+			//If currencyA changes the convert function is called again
 			currencyA: function(){
 				if(this.currencyA_value){
 					this.convert();

@@ -47,17 +47,29 @@
 		},
 		methods:{
 			changeList(){
+				
+				//URL to the currency converter
 				let url = 'https://api.exchangeratesapi.io/latest';
+
+				/*fetch sends a GET request to the URL above. It receives a response that
+				is converted to JSON and then all its properties names are converted into
+				an array*/
 				fetch(url).then(res => res.json()).then(json => { 
 					this.currencyList = Object.getOwnPropertyNames(json.rates);
 				});
 
+				//Small arrow in the dropdown list
 				var arrow = document.querySelector(".arrow");
+
+				/*If the dropdown list is in its "smaller mode" then it gets in its "bigger
+				mode" while the arrow rotates and change a little its hight*/
 				if(this.styleList.height == "29px"){
 					this.styleList.height = "493px";
 					arrow.style.transform = "rotate(-135deg)";
 					arrow.style.top = "10px";
 				}
+
+				//If the dropdown list is in its "bigger mode" the opposite happens
 				else{
 					this.styleList.height = "29px";
 					arrow.style.transform = "rotate(45deg)";
@@ -65,6 +77,8 @@
 				}
 				
 			},
+
+			//currencySelected is set to be the currency (in a p tag) that the user has clicked
 			selectCurrency(c){
 				this.currencySelected = c;
 
