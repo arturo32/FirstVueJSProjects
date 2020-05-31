@@ -1,13 +1,13 @@
 <template>
 	<div class="options">
 		<h2>Choose a base currency: </h2>
-		<!-- Extra div to make the absolute position of the lang_options div relative to it-->
+		<!-- Extra div to make the absolute position of the currency_options div relative to it-->
 		<div id="">
-			<div v-on:click="changeList" v-bind:style="styleList" id="lang_options" >
+			<div v-on:click="changeList" v-bind:style="styleList" id="currency_options" >
 				<div class = "arrow" ></div>
-				<p id = "lang_selected" title="Linguagem">{{currencySelected}}</p> 
+				<p id = "currency_selected" title="Base Currency">{{currencySelected}}</p> 
 				<div class="list-group" v-for="(currency, index) in currencies" v-bind:key="index">
-					<p class = "lang_item" v-bind:id='currency' v-on:click="selectCurrency(currency)">{{currency}}</p>
+					<p class = "currency_item" v-bind:id='currency' v-on:click="selectCurrency(currency)">{{currency}}</p>
 				</div>
 			</div>
 		</div>
@@ -39,24 +39,28 @@
 		},
 		data(){
 			return{
-				currencyList:[],
+				currencyList: [],
 				styleList: {height: '29px'},
 				currencySelected: 'BRL',
 				generalCurrency_value: ''
 			}
 		},
+
+		created(){
+
+			//URL to the currency converter
+			let url = 'https://api.exchangeratesapi.io/latest';
+
+			/*fetch sends a GET request to the URL above. It receives a response that
+			is converted to JSON and then all its properties names are converted into
+			an array*/
+			fetch(url).then(res => res.json()).then(json => { 
+				this.currencyList = Object.getOwnPropertyNames(json.rates);
+			});
+		},
+
 		methods:{
 			changeList(){
-				
-				//URL to the currency converter
-				let url = 'https://api.exchangeratesapi.io/latest';
-
-				/*fetch sends a GET request to the URL above. It receives a response that
-				is converted to JSON and then all its properties names are converted into
-				an array*/
-				fetch(url).then(res => res.json()).then(json => { 
-					this.currencyList = Object.getOwnPropertyNames(json.rates);
-				});
 
 				//Small arrow in the dropdown list
 				var arrow = document.querySelector(".arrow");
@@ -98,29 +102,25 @@
 
 
 <style scoped>
-	.options{
-		margin-bottom: 100px;
-	}
 	h2{
 		text-align:center;
 		margin: 0;
 	}
 
-	#lang_options{
+	#currency_options{
 		width: 85px;
 		border: 0px;
 		display: inline-block; 
-		margin-top: 40px;
+		margin-top: 45px;
 		background-color: white;
 		color: var(--titlesColor);
-		border-radius: 20px;
 		position: absolute;
 		font-family: Arial, sans-serif;
 		font-weight: 600;
 		font-size: 16px;
 		cursor: pointer;
 		transition: all 300ms ease-out;
-		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
 		height: 29px;   
 		overflow-y: hidden; 
 		left: 0;
@@ -129,7 +129,7 @@
 		margin-right: auto;
 	}
 
-	#lang_options p{
+	#currency_options p{
 		margin: 0px;
 		padding-top: 5px;
 		padding-bottom: 5px;
@@ -137,7 +137,7 @@
 	}
 
 
-	.lang_item:hover{
+	.currency_item:hover{
 		background-color: #d9d9d9;
 	}
 
