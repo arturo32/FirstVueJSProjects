@@ -11,9 +11,13 @@
 			</span>
 		</div>
 		<div class="todos">
-			<div v-bind:class="{'is-complete':todo.completed}" v-on:dblclick="onDblClick(todo)" v-for="todo in allTodos" v-bind:key="todo.id" class="todo">
+			<div 
+				v-for="todo in allTodos" 
+				v-bind:class="{'is-complete':todo.completed}"
+				v-on:dblclick="onDblClick(todo)" 
+				v-bind:key="todo.id" class="todo">
 				{{todo.title}}
-				<div v-on:click="deleteTodo(todo.id)" class="delete"></div>
+				<div v-on:click="deleteTodo(todo.id)" class="delete"><i class="fa fa-times-rectangle"></i></div>
 			</div>
 		</div>
 	</div>
@@ -56,20 +60,24 @@
 		text-align: center;
 		position: relative;
 		cursor: pointer;
-		user-select: none;
+		user-select: none;	
 	}
 	.delete{
+		color: white;
+		display: inline-block;
 		position: absolute;
-		bottom: 10px;
-		right: 10px;
-		width: 20px;
-		height: 20px;
-		background-color: red;
+		bottom: 0px;
+		right: 7px;
+	}
+
+	.delete i{
+		font-size: 19px;
 	}
 	.legend {
-		display: flex;
-		justify-content: space-around;;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
 		margin-bottom: 1rem;
+		grid-column-gap: 20px;
 	}
 
 	.complete-box {
@@ -92,6 +100,9 @@
 
 	@media (max-width: 500px){
 		.todos{
+			grid-template-columns: 1fr;
+		}
+		.legend{
 			grid-template-columns: 1fr;
 		}
 	}
